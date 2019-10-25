@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class User {
-    @Column(unique = true)
+    @Column(unique = true, name = "NAME")
     private String name;
 
     @Id
@@ -12,7 +12,15 @@ public class User {
     private long Id;
 
     @ManyToOne
+    @JoinColumn
     private University university;
+
+    public User() {}
+
+    public User(String name, University university) {
+        this.name = name;
+        this.university = university;
+    }
 
     public long getId() {
         return Id;
@@ -26,8 +34,8 @@ public class User {
         this.name = name;
     }
 
-    public University getUniversity() {
-        return university;
+    public String getUniversity() {
+        return university.getName();
     }
 
     public void setUniversity(University university) {

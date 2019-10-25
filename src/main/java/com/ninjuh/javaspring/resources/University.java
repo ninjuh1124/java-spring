@@ -2,10 +2,10 @@ package com.ninjuh.javaspring.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 @Entity
 @Table(name = "UNIVERSITY")
@@ -14,16 +14,15 @@ public class University {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "NUMBER_OF_STUDENTS")
-    private int numberOfStudents;
+    @OneToMany(mappedBy = "university")
+    // @JsonIgnore
+    private List<User> users;
 
     @Column(name = "SEMESTER_COSTS")
-    @JsonIgnore     // value will be ignored when converting object into json, ie won't be sent to user
     private int semesterCosts;
 
-    public University(String name, int numberOfStudents, int semesterCosts) {
+    public University(String name, int semesterCosts) {
         this.name = name;
-        this.numberOfStudents = numberOfStudents;
         this.semesterCosts = semesterCosts;
     }
 
@@ -33,16 +32,22 @@ public class University {
         return name;
     }
 
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getNumberOfStudents() {
-        return numberOfStudents;
-    }
+    public List<String> getUsers() {
+        List<String> names = new ArrayList<>();
 
-    public void setNumberOfStudents(int numberOfStudents) {
-        this.numberOfStudents = numberOfStudents;
+        for (User user : users) {
+            names.add(user.getName());
+        }
+
+        return names;
     }
 
     public int getSemesterCosts() {
